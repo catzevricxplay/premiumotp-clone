@@ -1,17 +1,3 @@
 {
-  "cleanUrls": true,
-  "rewrites": [
-    {
-      "destination": "/dashboard.html",
-      "source": "/dashboard"
-    },
-    {
-      "destination": "/add-funds.html",
-      "source": "/add-funds"
-    },
-    {
-      "destination": "/login.html",
-      "source": "/login"
-    }
-  ]
+  "cleanUrls": true
 }
