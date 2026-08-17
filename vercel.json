@@ -1,9 +1,21 @@
 {
   "cleanUrls": true,
   "rewrites": [
-    {"source": "/dashboard", "destination": "/dashboard.html"},
-    {"source": "/add-funds", "destination": "/add-funds.html"},
-    {"source": "/login", "destination": "/login.html"},
-    {"source": "/signup", "destination": "/signup.html"}
+    {
+      "source": "/dashboard",
+      "destination": "/dashboard.html"
+    },
+    {
+      "source": "/add-funds",
+      "destination": "/add-funds.html"
+    },
+    {
+      "source": "/login",
+      "destination": "/login.html"
+    },
+    {
+      "source": "/signup",
+      "destination": "/signup.html"
+    }
   ]
 }
