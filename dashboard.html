@@ -37,7 +37,7 @@ body.dark{--bg:#0f172a;--card:#1e293b;--text:#f1f5f9;--muted:#94a3b8;--border:#3
 .plus{background:#2563eb;color:#fff;padding:8px;border-radius:10px;cursor:pointer}
 .overlay{display:none}
 .overlay.show{display:block;position:fixed;inset:0;background:rgba(2,6,23,0.5);z-index:30}
-.sidebar{position:fixed;left:0;top:0;height:100%;width:320px;background:var(--card);box-shadow:2px 0 20px rgba(0,0,0,0.08);transform:translateX(-110%);transition:0.25s;z-index:40;padding:18px 0}
+.sidebar{position:fixed;left:0;top:0;height:100vh;width:320px;background:var(--card);box-shadow:2px 0 20px rgba(0,0,0,0.08);transform:translateX(-110%);transition:0.25s;z-index:40;padding:18px 0;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .sidebar.show{transform:translateX(0)}
 .side-head{padding:16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px}
 .side-head .avatar{width:64px;height:64px;border-radius:16px;background:linear-gradient(135deg,#7c3aed,#06b6d4);display:grid;place-items:center;color:#fff;font-weight:800;font-size:26px}
@@ -81,19 +81,19 @@ body.dark{--bg:#0f172a;--card:#1e293b;--text:#f1f5f9;--muted:#94a3b8;--border:#3
 </div>
 <div class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Light/Dark Mode">🍌</div>
 </div>
-<div class="menu">
+<div class="menu" id="menuItems">
 <a href="index.html" class="item"><span class="icon">🏠</span> Home</a>
 <a href="smm-panel.html" class="item"><span class="icon">🛒</span> Smm Panel</a>
 <a href="proxies.html" class="item"><span class="icon">🌐</span> Proxies</a>
 <a href="my-proxies.html" class="item"><span class="icon">📦</span> My Proxies</a>
 <a href="recharge.html" class="item"><span class="icon">⚡</span> Recharge</a>
 <a href="recharge-history.html" class="item"><span class="icon">💰</span> Recharge History</a>
-<a href="transactions.html" class="item"><span class="icon">📒</span> Transactions</a>
+<a href="transactions.html" class="item"><span class="icon">����</span> Transactions</a>
 <a href="dashboard.html" class="item active"><span class="icon">📞</span> Active Number</a>
 <a href="number-history.html" class="item"><span class="icon">📜</span> Number History</a>
 <a href="success-rate.html" class="item"><span class="icon">🚀</span> Success Rate</a>
 <a href="api.html" class="item"><span class="icon">🛠️</span> API</a>
-<a href="support.html" class="item"><span class="icon">✉��</span> Support</a>
+<a href="support.html" class="item"><span class="icon">✉️</span> Support</a>
 <a href="telegram-channel.html" class="item"><span class="icon">📢</span> Telegram Channel</a>
 <div class="divider"></div>
 <a class="item logout" onclick="logout()"><span class="icon">🚪</span> Logout</a>
@@ -117,17 +117,28 @@ body.dark{--bg:#0f172a;--card:#1e293b;--text:#f1f5f9;--muted:#94a3b8;--border:#3
   // Force authentication on dashboard — redirect to login.html if not signed in
   document.addEventListener('DOMContentLoaded', ()=> {
     initTheme();
-    // show zero balance initially so demo does not show leftover values
+    // force display zero balance immediately and reset stored balance to avoid leftover values
     const balEl = document.getElementById('bal'); if(balEl) balEl.innerText = '₹0.00';
+    const user = getCurrentUser();
+    if(user){ user.balance = '0.00'; saveUser(user); }
     initAuth(true); // true = required (will redirect to login.html when no user)
   });
+
+  function toggleMenu(){
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    const show = !sidebar.classList.contains('show');
+    sidebar.classList.toggle('show');
+    overlay.classList.toggle('show');
+    // lock body scroll when sidebar open so user can scroll sidebar only
+    document.body.style.overflow = show ? 'hidden' : '';
+  }
 </script>
 <script src="balance.js"></script>
 <script>
 // Theme Toggle - Light/Dark Mode
 function initTheme(){
   const saved = localStorage.getItem('theme');
-  // default to light unless user chose dark previously
   const theme = saved || 'light';
   document.body.classList.toggle('dark', theme==='dark');
   updateThemeIcon(theme);
@@ -142,14 +153,9 @@ function toggleTheme(){
 function updateThemeIcon(theme){
   const btn=document.getElementById('themeToggle');
   if(!btn) return;
-  // Show banana in light mode, sun in dark mode (banana toggles to dark)
   btn.innerText = theme==='dark' ? '☀️' : '🍌';
 }
 
-function toggleMenu(){
- document.getElementById('sidebar').classList.toggle('show');
- document.getElementById('overlay').classList.toggle('show');
-}
 function filterServices(){
  let q=document.getElementById('search').value.toLowerCase();
  document.querySelectorAll('.service-card').forEach(c=>{
@@ -158,5 +164,6 @@ function filterServices(){
  });
 }
 </script>
-<script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","so...";})();</script>
+<script>(function(){var loc=location.href.replace(/#.*$/,"\");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","so...";})();</script>
+</body>
 </html>
