@@ -8,14 +8,17 @@
     :root{--bg:#0f1724;--panel:#0b1220;--muted:#9aa4b2;--accent:#7c3aed;--card:#0f172a}
     *{box-sizing:border-box}
     body{margin:0;font-family:Inter,system-ui,Arial;background:linear-gradient(180deg,#07080a 0,#0f1724 100%);color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
-    .modal{width:100%;max-width:420px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:14px;padding:18px;border:1px solid rgba(255,255,255,0.04);box-shadow:0 8px 30px rgba(2,6,23,0.6)}
+    .modal{width:100%;max-width:520px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:14px;padding:18px;border:1px solid rgba(255,255,255,0.04);box-shadow:0 8px 30px rgba(2,6,23,0.6)}
     .header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
     .title{font-weight:800;font-size:18px}
     .sub{font-size:12px;color:var(--muted)}
     .asset{display:flex;align-items:center;gap:10px}
     .badge{background:#06202a;padding:6px 10px;border-radius:10px;font-weight:700;color:#8be2c9}
     .qr-wrap{background:#e9eef6;border-radius:12px;padding:18px;margin:16px 0;display:flex;justify-content:center}
-    .qr{width:220px;height:220px;background:#fff;border-radius:10px;display:grid;place-items:center}
+    .qr{width:280px;height:280px;background:#fff;border-radius:10px;display:grid;place-items:center}
+    .tabs{display:flex;gap:8px;margin-bottom:10px}
+    .tab{flex:1;padding:8px;border-radius:10px;text-align:center;cursor:pointer;font-weight:700;background:transparent;border:1px solid rgba(255,255,255,0.03)}
+    .tab.active{background:linear-gradient(90deg,#7c3aed,#06b6d4);color:#fff}
     .addr{background:rgba(255,255,255,0.03);padding:12px;border-radius:10px;display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
     .addr .text{font-family:ui-monospace,monospace;font-size:13px;color:#d9e3ef;word-break:break-all}
     .copy-btn{background:linear-gradient(90deg,#7c3aed,#00b4ff);border:none;color:#fff;padding:8px 12px;border-radius:10px;cursor:pointer;font-weight:700}
@@ -37,20 +40,23 @@
         <div class="title">Receive</div>
         <div class="sub">Add funds to your PREMIUM SMS account</div>
       </div>
-      <div style="opacity:0.9;font-size:13px">USDT <span style="font-weight:800;margin-left:6px">TRON</span></div>
+      <div style="opacity:0.9;font-size:13px" id="methodLabel">USDT <span style="font-weight:800;margin-left:6px">TRON</span></div>
+    </div>
+
+    <div class="tabs" role="tablist">
+      <div class="tab active" id="tab-usdt" onclick="selectMethod('usdt')">USDT (TRON)</div>
+      <div class="tab" id="tab-upi" onclick="selectMethod('upi')">UPI (INR)</div>
     </div>
 
     <div class="qr-wrap">
-      <!-- Replace the img src below with your actual QR image URL (use your wallet QR or UPI QR) -->
       <div class="qr" id="qrArea">
-        <!-- Placeholder: user should replace with <img src="YOUR_QR_URL" style="width:100%;height:100%;object-fit:contain;border-radius:8px"> -->
-        <img id="qrImg" src="/assets/qr-placeholder.png" alt="QR" style="width:100%;height:100%;object-fit:contain;border-radius:8px;display:block">
+        <img id="qrImg" src="/usdt_qr_clean.png" alt="QR" style="width:100%;height:100%;object-fit:contain;border-radius:8px;display:block">
       </div>
     </div>
 
-    <div class="addr">
+    <div class="addr" id="addrBox">
       <div>
-        <div style="font-size:12px;color:var(--muted)">Wallet Address</div>
+        <div style="font-size:12px;color:var(--muted)" id="addrLabel">Wallet Address</div>
         <div class="text" id="walletAddr">TLwAWcJ7Tm34jqyYqV6qhizQHy8pe7US1v</div>
       </div>
       <div style="display:flex;flex-direction:column;gap:8px">
@@ -59,7 +65,7 @@
       </div>
     </div>
 
-    <div class="notice">Only send TRON network assets (USDT-TRC20) to this address. Sending other networks will result in permanent loss.</div>
+    <div class="notice" id="noticeText">Only send TRON network assets (USDT-TRC20) to this address. Sending other networks will result in permanent loss.</div>
 
     <div class="field">
       <label>Amount (USD / ₹)</label>
@@ -80,11 +86,38 @@
   </div>
 
 <script>
-  // NOTE: Replace the placeholder QR src and default wallet address below with your real data.
-  // If you want me to set your actual QR image and address, paste the QR image URL and address here and I'll update the file.
+  // Use uploaded images present at repository root
+  const USDT_QR = '/usdt_qr_clean.png';
+  const UPI_QR = '/upi_qr_clean.png';
+  const USDT_ADDR = 'TLwAWcJ7Tm34jqyYqV6qhizQHy8pe7US1v';
+  const UPI_ID = 'zervicxplay@okhdfcbank';
+
+  function selectMethod(method){
+    document.getElementById('tab-usdt').classList.toggle('active', method==='usdt');
+    document.getElementById('tab-upi').classList.toggle('active', method==='upi');
+    const img = document.getElementById('qrImg');
+    const addrLabel = document.getElementById('addrLabel');
+    const walletAddr = document.getElementById('walletAddr');
+    const notice = document.getElementById('noticeText');
+    const methodLabel = document.getElementById('methodLabel');
+    if(method==='usdt'){
+      img.src = USDT_QR;
+      addrLabel.innerText = 'Wallet Address';
+      walletAddr.innerText = USDT_ADDR;
+      notice.innerText = 'Only send TRON network assets (USDT-TRC20) to this address. Sending other networks will result in permanent loss.';
+      methodLabel.innerHTML = 'USDT <span style="font-weight:800;margin-left:6px">TRON</span>';
+    } else {
+      img.src = UPI_QR;
+      addrLabel.innerText = 'UPI ID';
+      walletAddr.innerText = UPI_ID;
+      notice.innerText = 'Scan using any UPI app or copy the UPI ID to pay. Payments in INR are accepted via UPI.';
+      methodLabel.innerHTML = 'UPI <span style="font-weight:800;margin-left:6px">INR</span>';
+    }
+  }
 
   function copyToClipboard(id){
-    const text=document.getElementById(id).innerText || document.getElementById(id).value;
+    const el=document.getElementById(id);
+    const text = el.innerText || el.value || '';
     navigator.clipboard.writeText(text).then(()=>{ alert('Copied to clipboard') }).catch(()=>{ alert('Copy failed — select and copy manually') });
   }
   function shareQR(){
@@ -96,15 +129,18 @@
     }
   }
   function confirmPayment(){
-    // This is a placeholder. Integrate with your backend to verify TxID or accept manual verification.
     const amt=document.getElementById('amount').value.trim();
     const ref=document.getElementById('ref').value.trim();
     if(!amt){ if(!confirm('No amount entered. Continue?')) return; }
     alert('Payment confirmation requested. We will verify and credit after checking the TxID/UTR.\nAmount: '+amt+'\nRef: '+ref);
+    // TODO: Integrate with backend to record pending payment and verify automatically
   }
   function cancelPayment(){
     if(confirm('Cancel payment?')) window.history.back();
   }
+
+  // Initialize default view
+  selectMethod('usdt');
 </script>
 </body>
 </html>
