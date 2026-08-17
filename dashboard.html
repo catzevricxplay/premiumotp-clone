@@ -29,12 +29,35 @@
 :root{--bg:#f8fafc;--card:#ffffff;--text:#1e293b;--muted:#64748b;--border:#e2e8f0;--hover:#eef2ff;--icon-bg:#f8fafc}
 body.dark{--bg:#0f172a;--card:#1e293b;--text:#f1f5f9;--muted:#94a3b8;--border:#334155;--hover:#1e293b;--icon-bg:#334155}
 *{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text);transition:0.3s}
-.topbar{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:20;transition:0.3[...]
-.icon{font-size:20px;width:24px;text-align:center}
+.topbar{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:20}
+.logo{font-weight:800;font-size:20px}
+.balance{display:flex;align-items:center;gap:12px}
+.bal-text{font-size:12px;color:var(--muted)}
+.bal-amt{font-weight:800;color:green}
+.plus{background:#2563eb;color:#fff;padding:8px;border-radius:10px;cursor:pointer}
+.overlay{display:none}
+.overlay.show{display:block;position:fixed;inset:0;background:rgba(2,6,23,0.5);z-index:30}
+.sidebar{position:fixed;left:0;top:0;height:100%;width:320px;background:var(--card);box-shadow:2px 0 20px rgba(0,0,0,0.08);transform:translateX(-110%);transition:0.25s;z-index:40;padding:18px 0}
+.sidebar.show{transform:translateX(0)}
+.side-head{padding:16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px}
+.side-head .avatar{width:64px;height:64px;border-radius:16px;background:linear-gradient(135deg,#7c3aed,#06b6d4);display:grid;place-items:center;color:#fff;font-weight:800;font-size:26px}
+.side-head .user-name{font-weight:800;margin-top:8px}
+.side-head .user-email{font-size:13px;color:var(--muted);text-decoration:underline}
+.theme-toggle{width:44px;height:44px;border-radius:12px;border:1px solid var(--border);background:var(--card);display:grid;place-items:center;cursor:pointer;font-size:20px}
+.menu{padding:8px 0}
+/* Styled menu items (prevent default blue link styles) */
+.menu .item{display:flex;align-items:center;gap:12px;padding:12px 16px;color:var(--muted);text-decoration:none;border-radius:12px;margin:6px 12px;transition:0.15s}
+.menu .item .icon{font-size:20px;width:30px;text-align:center}
+.menu .item:hover{background:var(--hover);color:var(--text)}
+.menu .item.active{background:var(--hover);color:var(--text)}
+.menu .item.logout{color:#ef4444;font-weight:700}
 .divider{height:1px;background:var(--border);margin:12px 16px}
-.logout{color:#ef4444 !important}
-.theme-toggle{width:36px;height:36px;border-radius:10px;border:1px solid var(--border);background:var(--card);display:grid;place-items:center;cursor:pointer;font-size:18px;transition:0.3s}
-.theme-toggle:hover{background:var(--hover)}
+.main{max-width:900px;margin:18px auto;padding:0 18px}
+.search{width:100%;padding:14px;border-radius:12px;border:1px solid var(--border);margin-bottom:18px}
+.service-card{display:flex;align-items:center;justify-content:space-between;padding:18px;border-radius:12px;background:var(--card);border:1px solid var(--border);margin-bottom:12px}
+.s-left{display:flex;align-items:center;gap:12px}
+.s-icon-fallback{width:48px;height:48px;border-radius:12px;background:var(--icon-bg);display:grid;place-items:center;font-weight:800}
+.s-name{font-weight:800}
 </style>
 </head>
 <body>
@@ -56,7 +79,7 @@ body.dark{--bg:#0f172a;--card:#1e293b;--text:#f1f5f9;--muted:#94a3b8;--border:#3
 <div class="user-name" id="uName">Loading...</div>
 <div class="user-email" id="uEmail">loading...</div>
 </div>
-<div class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Light/Dark Mode">🌙</div>
+<div class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Light/Dark Mode">🍌</div>
 </div>
 <div class="menu">
 <a href="index.html" class="item"><span class="icon">🏠</span> Home</a>
@@ -70,7 +93,7 @@ body.dark{--bg:#0f172a;--card:#1e293b;--text:#f1f5f9;--muted:#94a3b8;--border:#3
 <a href="number-history.html" class="item"><span class="icon">📜</span> Number History</a>
 <a href="success-rate.html" class="item"><span class="icon">🚀</span> Success Rate</a>
 <a href="api.html" class="item"><span class="icon">🛠️</span> API</a>
-<a href="support.html" class="item"><span class="icon">✉️</span> Support</a>
+<a href="support.html" class="item"><span class="icon">✉��</span> Support</a>
 <a href="telegram-channel.html" class="item"><span class="icon">📢</span> Telegram Channel</a>
 <div class="divider"></div>
 <a class="item logout" onclick="logout()"><span class="icon">🚪</span> Logout</a>
@@ -85,70 +108,7 @@ body.dark{--bg:#0f172a;--card:#1e293b;--text:#f1f5f9;--muted:#94a3b8;--border:#3
 <div class="service-card" data-name="567slots"><div class="s-left"><div class="s-icon-fallback">?</div><div class="s-name">567slots</div></div><div class="s-arrow">⌄</div></div>
 <div class="service-card" data-name="6club"><div class="s-left"><div class="s-icon-fallback">?</div><div class="s-name">6Club</div></div><div class="s-arrow">⌄</div></div>
 <div class="service-card" data-name="91club"><div class="s-left"><div class="s-icon-fallback">?</div><div class="s-name">91club</div></div><div class="s-arrow">⌄</div></div>
-<div class="service-card" data-name="99 acres"><div class="s-left"><img class="s-icon-img" src="https://www.google.com/s2/favicons?domain=99acres.com&sz=128" alt="99 Acres" onerror="this.style.di[...]
-<div class="service-card" data-name="abcd / aditya birla"><div class="s-left"><div class="s-icon-fallback">?</div><div class="s-name">ABCD / Aditya Birla</div></div><div class="s-arrow">⌄</div>[...]
-<div class="service-card" data-name="adityabirla"><div class="s-left"><div class="s-icon-fallback">?</div><div class="s-name">Adityabirla</div></div><div class="s-arrow">⌄</div></div>
-<div class="service-card" data-name="airtel"><div class="s-left"><img class="s-icon-img" src="https://www.google.com/s2/favicons?domain=airtel.in&sz=128" alt="Airtel" onerror="this.style.display=[...]
-<div class="service-card" data-name="ajio"><div class="s-left"><img class="s-icon-img" src="https://www.google.com/s2/favicons?domain=ajio.com&sz=128" alt="Ajio" onerror="this.style.display=[...]
-<div class="service-card" data-name="all"><div class="s-left"><div class="s-icon-fallback">?</div><div class="s-name">ALL</div></div><div class="s-arrow">⌄</div></div>
-<div class="service-card" data-name="all--any other"><div class="s-left"><div class="s-icon-fallback">?</div><div class="s-name">ALL--Any Other</div></div><div class="s-arrow">⌄</div></div>
-<div class="service-card" data-name="amazon"><div class="s-left"><img class="s-icon-img" src="https://www.google.com/s2/favicons?domain=amazon.in&sz=128" alt="Amazon" onerror="this.style.display=[...]
-<div class="service-card" data-name="angel one"><div class="s-left"><div class="s-icon-fallback">?</div><div class="s-name">Angel One</div></div><div class="s-arrow">⌄</div></div>
-<div class="service-card" data-name="any other"><div class="s-left"><div class="s-icon-fallback">?</div><div class="s-name">Any other</div></div><div class="s-arrow">⌄</div></div>
-<div class="service-card" data-name="apple"><div class="s-left"><img class="s-icon-img" src="https://www.google.com/s2/favicons?domain=apple.com&sz=128" alt="Apple" onerror="this.style.display='n[...]
-<div class="service-card" data-name="banglarbhumi"><div class="s-left"><div class="s-icon-fallback">?</div><div class="s-name">BanglarbHumi</div></div><div class="s-arrow">⌄</div></div>
-<div class="service-card" data-name="bharat petroleum"><div class="s-left"><div class="s-icon-fallback">?</div><div class="s-name">Bharat Petroleum</div></div><div class="s-arrow">⌄</div></div>
-<div class="service-card" data-name="bharat taxi"><div class="s-left"><div class="s-icon-fallback">?</div><div class="s-name">Bharat Taxi</div></div><div class="s-arrow">⌄</div></div>
-<div class="service-card" data-name="bharatgas"><div class="s-left"><div class="s-icon-fallback">?</div><div class="s-name">Bharatgas</div></div><div class="s-arrow">⌄</div></div>
-<div class="service-card" data-name="bharatpe"><div class="s-left"><img class="s-icon-img" src="https://www.google.com/s2/favicons?domain=bharatpe.com&sz=128" alt="BharatPe" onerror="this.style.d[...]
-<div class="service-card" data-name="bigbasket"><div class="s-left"><img class="s-icon-img" src="https://www.google.com/s2/favicons?domain=bigbasket.com&sz=128" alt="bigbasket" onerror="this.styl[...]
-<div class="service-card" data-name="blinkit"><div class="s-left"><img class="s-icon-img" src="https://www.google.com/s2/favicons?domain=blinkit.com&sz=128" alt="Blinkit" onerror="this.style.disp[...]
-<div class="service-card" data-name="brevistay"><div class="s-left"><div class="s-icon-fallback">?</div><div class="s-name">Brevistay</div></div><div class="s-arrow">⌄</div></div>
-<div class="service-card" data-name="brevistay new"><div class="s-left"><div class="s-icon-fallback">?</div><div class="s-name">Brevistay new</div></div><div class="s-arrow">⌄</div></div>
-<div class="service-card" data-name="dominos pizza"><div class="s-left"><img class="s-icon-img" src="https://www.google.com/s2/favicons?domain=dominos.co.in&sz=128" alt="Dominos Pizza" onerror="t[...]
-<div class="service-card" data-name="dotandkey"><div class="s-left"><img class="s-icon-img" src="https://www.google.com/s2/favicons?domain=dotandkey.com&sz=128" alt="Dotandkey" onerror="this.styl[...]
-<div class="service-card" data-name="facebook"><div class="s-left"><img class="s-icon-img" src="https://www.google.com/s2/favicons?domain=facebook.com&sz=128" alt="facebook" onerror="this.style.d[...]
-<div class="service-card" data-name="flipkart"><div class="s-left"><img class="s-icon-img" src="https://www.google.com/s2/favicons?domain=flipkart.com&sz=128" alt="Flipkart" onerror="this.style.d[...]
-<div class="service-card" data-name="flipkart seller"><div class="s-left"><img class="s-icon-img" src="https://www.google.com/s2/favicons?domain=flipkart.com&sz=128" alt="Flipkart Seller" onerror[...]
-<div class="service-card" data-name="flot"><div class="s-left"><div class="s-icon-fallback">?</div><div class="s-name">Flot</div></div><div class="s-arrow">⌄</div></div>
-<div class="service-card" data-name="freechargeapp"><div class="s-left"><img class="s-icon-img" src="https://www.google.com/s2/favicons?domain=freecharge.in&sz=128" alt="FreeChargeApp" onerror="t[...]
-<div class="service-card" data-name="freehit"><div class="s-left"><div class="s-icon-fallback">?</div><div class="s-name">Freehit</div></div><div class="s-arrow">⌄</div></div>
-<div class="service-card" data-name="game3f 2"><div class="s-left"><div class="s-icon-fallback">?</div><div class="s-name">Game3f 2</div></div><div class="s-arrow">⌄</div></div>
-<div class="service-card" data-name="google pay"><div class="s-left"><img class="s-icon-img" src="https://www.google.com/s2/favicons?domain=google.com&sz=128" alt="Google Pay" onerror="this.style[...]
-<div class="service-card" data-name="google, gmail, youtube"><div class="s-left"><img class="s-icon-img" src="https://www.google.com/s2/favicons?domain=google.com&sz=128" alt="Google, Gmail, Yout[...]
-<div class="service-card" data-name="gosats"><div class="s-left"><div class="s-icon-fallback">?</div><div class="s-name">Gosats</div></div><div class="s-arrow">⌄</div></div>
-<div class="service-card" data-name="incredmoney"><div class="s-left"><div class="s-icon-fallback">?</div><div class="s-name">IncredMoney</div></div><div class="s-arrow">⌄</div></div>
-<div class="service-card" data-name="indiamart"><div class="s-left"><img class="s-icon-img" src="https://www.google.com/s2/favicons?domain=indiamart.com&sz=128" alt="IndiaMart" onerror="this.styl[...]
-<div class="service-card" data-name="indianoil"><div class="s-left"><div class="s-icon-fallback">?</div><div class="s-name">IndianOil</div></div><div class="s-arrow">⌄</div></div>
-<div class="service-card" data-name="instagram"><div class="s-left"><img class="s-icon-img" src="https://www.google.com/s2/favicons?domain=instagram.com&sz=128" alt="Instagram" onerror="this.styl[...]
-<div class="service-card" data-name="irctc"><div class="s-left"><img class="s-icon-img" src="https://www.google.com/s2/favicons?domain=irctc.co.in&sz=128" alt="IRCTC" onerror="this.style.display=[...]
-<div class="service-card" data-name="jaiclub"><div class="s-left"><div class="s-icon-fallback">?</div><div class="s-name">Jaiclub</div></div><div class="s-arrow">⌄</div></div>
-<div class="service-card" data-name="jaiclub01"><div class="s-left"><div class="s-icon-fallback">?</div><div class="s-name">jaiclub01</div></div><div class="s-arrow">⌄</div></div>
-<div class="service-card" data-name="las vegas casino"><div class="s-left"><div class="s-icon-fallback">?</div><div class="s-name">Las Vegas Casino</div></div><div class="s-arrow">⌄</div></div>
-<div class="service-card" data-name="licious"><div class="s-left"><img class="s-icon-img" src="https://www.google.com/s2/favicons?domain=licious.in&sz=128" alt="Licious" onerror="this.style.displ[...]
-<div class="service-card" data-name="linkedin"><div class="s-left"><img class="s-icon-img" src="https://www.google.com/s2/favicons?domain=linkedin.com&sz=128" alt="LinkedIn" onerror="this.style.d[...]
-<div class="service-card" data-name="magicpin"><div class="s-left"><img class="s-icon-img" src="https://www.google.com/s2/favicons?domain=magicpin.in&sz=128" alt="Magicpin" onerror="this.style.di[...]
-<div class="service-card" data-name="mantrimall"><div class="s-left"><div class="s-icon-fallback">?</div><div class="s-name">Mantrimall</div></div><div class="s-arrow">⌄</div></div>
-<div class="service-card" data-name="meesho"><div class="s-left"><img class="s-icon-img" src="https://www.google.com/s2/favicons?domain=meesho.com&sz=128" alt="Meesho" onerror="this.style.display[...]
-<div class="service-card" data-name="microsoft"><div class="s-left"><img class="s-icon-img" src="https://www.google.com/s2/favicons?domain=microsoft.com&sz=128" alt="Microsoft" onerror="this.styl[...]
-<div class="service-card" data-name="mobikwik"><div class="s-left"><img class="s-icon-img" src="https://www.google.com/s2/favicons?domain=mobikwik.com&sz=128" alt="MobiKwik" onerror="this.style.d[...]
-<div class="service-card" data-name="money control"><div class="s-left"><div class="s-icon-fallback">?</div><div class="s-name">Money Control</div></div><div class="s-arrow">⌄</div></div>
-<div class="service-card" data-name="mospay"><div class="s-left"><div class="s-icon-fallback">?</div><div class="s-name">Mospay</div></div><div class="s-arrow">⌄</div></div>
-<div class="service-card" data-name="my hpgas"><div class="s-left"><div class="s-icon-fallback">?</div><div class="s-name">My hpgas</div></div><div class="s-arrow">⌄</div></div>
-<div class="service-card" data-name="my jar"><div class="s-left"><div class="s-icon-fallback">?</div><div class="s-name">My jar</div></div><div class="s-arrow">⌄</div></div>
-<div class="service-card" data-name="myjio"><div class="s-left"><img class="s-icon-img" src="https://www.google.com/s2/favicons?domain=jio.com&sz=128" alt="MyJio" onerror="this.style.display='non[...]
-<div class="service-card" data-name="myntra"><div class="s-left"><img class="s-icon-img" src="https://www.google.com/s2/favicons?domain=myntra.com&sz=128" alt="Myntra" onerror="this.style.display=[...]
-<div class="service-card" data-name="myntro shop"><div class="s-left"><div class="s-icon-fallback">?</div><div class="s-name">Myntro Shop</div></div><div class="s-arrow">⌄</div></div>
-<div class="service-card" data-name="navi"><div class="s-left"><img class="s-icon-img" src="https://www.google.com/s2/favicons?domain=navi.com&sz=128" alt="Navi" onerror="this.style.display='none[...]
-<div class="service-card" data-name="nykaa"><div class="s-left"><img class="s-icon-img" src="https://www.google.com/s2/favicons?domain=nykaa.com&sz=128" alt="Nykaa" onerror="this.style.display='n[...]
-<div class="service-card" data-name="okwin"><div class="s-left"><div class="s-icon-fallback">?</div><div class="s-name">Okwin</div></div><div class="s-arrow">⌄</div></div>
-<div class="service-card" data-name="olacabs"><div class="s-left"><img class="s-icon-img" src="https://www.google.com/s2/favicons?domain=olacabs.com&sz=128" alt="Olacabs" onerror="this.style.disp[...]
-<div class="service-card" data-name="olx"><div class="s-left"><img class="s-icon-img" src="https://www.google.com/s2/favicons?domain=olx.in&sz=128" alt="OLX" onerror="this.style.display='none'; t[...]
-<div class="service-card" data-name="openai (chatgpt)"><div class="s-left"><img class="s-icon-img" src="https://www.google.com/s2/favicons?domain=openai.com&sz=128" alt="OpenAI (ChatGPT)" onerror[...]
-<div class="service-card" data-name="paytm"><div class="s-left"><img class="s-icon-img" src="https://www.google.com/s2/favicons?domain=paytm.com&sz=128" alt="Paytm" onerror="this.style[d...]
-<div class="service-card" data-name="phonepe"><div class="s-left"><img class="s-icon-img" src="https://www.google.com/s2/favicons?domain=phonepe.com&sz=128" alt="PhonePe" onerror="this.style[...]
-<div class="service-card" data-name="playkaro"><div class="s-left"><div class="s-icon-fallback">?</div><div class="s-name">PlayKaro</div></div><div class="s-arrow">⌄</div></div>
-<div class="service-card" data-name="railone / swarail"><div class="s-left"><div class="s-icon-fallback">?</div><div class="s-name">RailOne / SwaRail</div></div><div class="s-arrow">⌄</div></di[...]
+<div class="service-card" data-name="99 acres"><div class="s-left"><div class="s-icon-fallback">99</div><div class="s-name">99 Acres</div></div><div class="s-arrow">⌄</div></div>
 </div>
 </div>
 <script src="config.js"></script>
@@ -156,6 +116,9 @@ body.dark{--bg:#0f172a;--card:#1e293b;--text:#f1f5f9;--muted:#94a3b8;--border:#3
 <script>
   // Force authentication on dashboard — redirect to login.html if not signed in
   document.addEventListener('DOMContentLoaded', ()=> {
+    initTheme();
+    // show zero balance initially so demo does not show leftover values
+    const balEl = document.getElementById('bal'); if(balEl) balEl.innerText = '₹0.00';
     initAuth(true); // true = required (will redirect to login.html when no user)
   });
 </script>
@@ -163,9 +126,9 @@ body.dark{--bg:#0f172a;--card:#1e293b;--text:#f1f5f9;--muted:#94a3b8;--border:#3
 <script>
 // Theme Toggle - Light/Dark Mode
 function initTheme(){
-  const saved=localStorage.getItem('theme');
-  const prefersDark=window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const theme=saved || (prefersDark ? 'dark' : 'light');
+  const saved = localStorage.getItem('theme');
+  // default to light unless user chose dark previously
+  const theme = saved || 'light';
   document.body.classList.toggle('dark', theme==='dark');
   updateThemeIcon(theme);
 }
@@ -178,9 +141,10 @@ function toggleTheme(){
 }
 function updateThemeIcon(theme){
   const btn=document.getElementById('themeToggle');
-  if(btn) btn.innerText=theme==='dark' ? '☀️' : '🌙';
+  if(!btn) return;
+  // Show banana in light mode, sun in dark mode (banana toggles to dark)
+  btn.innerText = theme==='dark' ? '☀️' : '🍌';
 }
-initTheme();
 
 function toggleMenu(){
  document.getElementById('sidebar').classList.toggle('show');
@@ -194,5 +158,5 @@ function filterServices(){
  });
 }
 </script>
-<script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","so[...]
+<script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","so...";})();</script>
 </html>
